@@ -1,0 +1,4 @@
+mysql_root_password: Papila@1
+mysql_django_db: ghising_db
+mysql_django_user: ghising11
+mysql_django_password: Papila@1

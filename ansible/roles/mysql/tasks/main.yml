@@ -1,0 +1,32 @@
+- name: Install MySQL server
+  ansible.builtin.apt:
+    name: mysql-server
+    state: present
+
+- name: Start MySQL service
+  ansible.builtin.service:
+    name: mysqld
+    state: started
+    enabled: yes
+
+- name: Secure MySQL installation
+  ansible.builtin.command: mysql_secure_installation
+  args:
+    creates: /root/.mysql_secure_installed
+
+- name: Create MySQL database
+  ansible.builtin.mysql_db:
+    name: "{{ mysql_django_db }}"
+    state: present
+  become: yes
+  become_user: root
+
+- name: Create MySQL user for Django app
+      ansible.builtin.mysql_user:
+        name: "{{ mysql_django_user }}"
+        password: "{{ mysql_django_password }}"
+        host: localhost
+        priv: "{{ mysql_django_db }}.*:ALL"
+        state: present
+      become: yes
+      become_user: root
